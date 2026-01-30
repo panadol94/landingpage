@@ -4,10 +4,10 @@
 # Runs database migrations before starting the application
 
 echo "🔄 Running database migrations..."
-npx prisma db push --accept-data-loss
+node ./node_modules/prisma/build/index.js db push --accept-data-loss --skip-generate
 
 echo "🌱 Seeding database..."
-npx prisma db seed || echo "⚠️ Seeding failed or already completed"
+node ./node_modules/prisma/build/index.js db seed || echo "⚠️ Seeding failed or already completed"
 
 echo "🚀 Starting application..."
 exec node server.js
