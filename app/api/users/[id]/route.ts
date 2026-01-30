@@ -5,7 +5,7 @@ import { checkAdminRole } from '@/lib/check-admin'
 // GET /api/users/[id] - Get single user
 export async function GET(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     // Check admin authorization
     const adminCheck = await checkAdminRole()
@@ -17,7 +17,7 @@ export async function GET(
     }
 
     try {
-        const { id } = params
+        const { id } = await params
 
         const user = await prisma.user.findUnique({
             where: { id },
@@ -54,7 +54,7 @@ export async function GET(
 // PATCH /api/users/[id] - Update user
 export async function PATCH(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     // Check admin authorization
     const adminCheck = await checkAdminRole()
@@ -66,7 +66,7 @@ export async function PATCH(
     }
 
     try {
-        const { id } = params
+        const { id } = await params
         const body = await request.json()
         const { name, role } = body
 
@@ -138,7 +138,7 @@ export async function PATCH(
 // DELETE /api/users/[id] - Delete user
 export async function DELETE(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     // Check admin authorization
     const adminCheck = await checkAdminRole()
@@ -150,7 +150,7 @@ export async function DELETE(
     }
 
     try {
-        const { id } = params
+        const { id } = await params
 
         // Check if user exists
         const user = await prisma.user.findUnique({

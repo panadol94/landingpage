@@ -5,7 +5,7 @@ import { auth } from "@/lib/auth-config"
 // GET /api/shortlinks/[id] - Get single shortlink
 export async function GET(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         const session = await auth()
@@ -16,8 +16,9 @@ export async function GET(
             )
         }
 
+        const { id } = await params
         const shortlink = await prisma.shortlink.findUnique({
-            where: { id: params.id },
+            where: { id },
             include: {
                 _count: {
                     select: { clicks: true }
@@ -48,7 +49,7 @@ export async function GET(
 // PUT /api/shortlinks/[id] - Update shortlink
 export async function PUT(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         const session = await auth()
@@ -62,8 +63,9 @@ export async function PUT(
         const body = await request.json()
         const { destination, title, description, isActive, expiresAt } = body
 
+        const { id } = await params
         const updated = await prisma.shortlink.update({
-            where: { id: params.id },
+            where: { id },
             data: {
                 destination,
                 title,
@@ -89,7 +91,7 @@ export async function PUT(
 // DELETE /api/shortlinks/[id] - Delete shortlink
 export async function DELETE(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         const session = await auth()
@@ -100,8 +102,9 @@ export async function DELETE(
             )
         }
 
+        const { id } = await params
         await prisma.shortlink.delete({
-            where: { id: params.id }
+            where: { id }
         })
 
         return NextResponse.json({

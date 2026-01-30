@@ -7,7 +7,7 @@ import { prisma } from "@/lib/prisma"
 // DELETE /api/media/[id] - Delete media file
 export async function DELETE(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         const session = await auth()
@@ -18,7 +18,7 @@ export async function DELETE(
             )
         }
 
-        const { id } = params
+        const { id } = await params
 
         // Find media record
         const media = await prisma.media.findUnique({

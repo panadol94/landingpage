@@ -6,9 +6,9 @@ import { getClientIP, getUserAgent, getReferrer, getDeviceType, getBrowser } fro
 // Route: /[code]
 export async function GET(
     request: Request,
-    { params }: { params: { code: string } }
+    { params }: { params: Promise<{ code: string }> }
 ) {
-    const code = params.code
+    const { code } = await params
 
     try {
         // Find shortlink
