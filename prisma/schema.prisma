@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider      = "prisma-client-js"
   binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
@@ -11,102 +8,87 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// User management for admin panel
 model User {
-  id            String    @id @default(uuid())
-  email         String    @unique
-  passwordHash  String    @map("password_hash")
-  name          String?
-  role          UserRole  @default(ADMIN)
-  createdAt     DateTime  @default(now()) @map("created_at")
-  lastLogin     DateTime? @map("last_login")
-  
-  // Relations
+  id             String           @id @default(uuid())
+  email          String           @unique
+  passwordHash   String           @map("password_hash")
+  name           String?
+  role           UserRole         @default(ADMIN)
+  createdAt      DateTime         @default(now()) @map("created_at")
+  lastLogin      DateTime?        @map("last_login")
   contentUpdates LandingContent[]
-  shortlinks     Shortlink[]
   mediaUploads   Media[]
-  
+  shortlinks     Shortlink[]
+
   @@map("users")
 }
 
-enum UserRole {
-  ADMIN
-  EDITOR
-}
-
-// Landing page dynamic content
 model LandingContent {
-  id          String   @id @default(uuid())
-  section     String   // 'hero', 'features', 'about', 'cta', 'footer'
-  key         String   // 'title', 'description', 'image_url', etc
-  value       String   @db.Text
-  language    String   @default("ms") @db.VarChar(5)
-  updatedBy   String?  @map("updated_by")
-  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
-  
-  // Relations
-  updater     User?    @relation(fields: [updatedBy], references: [id], onDelete: SetNull)
-  
+  id        String   @id @default(uuid())
+  section   String
+  key       String
+  value     String
+  language  String   @default("ms") @db.VarChar(5)
+  updatedBy String?  @map("updated_by")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  updater   User?    @relation(fields: [updatedBy], references: [id])
+
   @@unique([section, key, language])
   @@map("landing_content")
 }
 
-// Shortlink system
 model Shortlink {
-  id          String    @id @default(uuid())
-  code        String    @unique @db.VarChar(50) // 'fb1', 'promo1'
-  destination String    @db.Text
-  title       String?   @db.VarChar(255)
-  description String?   @db.Text
-  qrCodeUrl   String?   @map("qr_code_url") @db.VarChar(255)
-  isActive    Boolean   @default(true) @map("is_active")
-  expiresAt   DateTime? @map("expires_at")
-  createdBy   String?   @map("created_by")
-  createdAt   DateTime  @default(now()) @map("created_at")
-  updatedAt   DateTime  @default(now()) @updatedAt @map("updated_at")
-  
-  // Relations
-  creator     User?     @relation(fields: [createdBy], references: [id], onDelete: SetNull)
+  id          String           @id @default(uuid())
+  code        String           @unique @db.VarChar(50)
+  destination String
+  title       String?          @db.VarChar(255)
+  description String?
+  qrCodeUrl   String?          @map("qr_code_url") @db.VarChar(255)
+  isActive    Boolean          @default(true) @map("is_active")
+  expiresAt   DateTime?        @map("expires_at")
+  createdBy   String?          @map("created_by")
+  createdAt   DateTime         @default(now()) @map("created_at")
+  updatedAt   DateTime         @default(now()) @updatedAt @map("updated_at")
   clicks      ShortlinkClick[]
-  
+  creator     User?            @relation(fields: [createdBy], references: [id])
+
   @@index([code])
   @@index([isActive])
   @@map("shortlinks")
 }
 
-// Click tracking for analytics
 model ShortlinkClick {
-  id           String    @id @default(uuid())
-  shortlinkId  String    @map("shortlink_id")
-  clickedAt    DateTime  @default(now()) @map("clicked_at")
-  ipAddress    String?   @map("ip_address") @db.VarChar(45)
-  userAgent    String?   @map("user_agent") @db.Text
-  referrer     String?   @db.Text
-  country      String?   @db.VarChar(2)
-  city         String?   @db.VarChar(100)
-  deviceType   String?   @map("device_type") @db.VarChar(20) // 'mobile', 'desktop', 'tablet'
-  browser      String?   @db.VarChar(50)
-  
-  // Relations
-  shortlink    Shortlink @relation(fields: [shortlinkId], references: [id], onDelete: Cascade)
-  
+  id          String    @id @default(uuid())
+  shortlinkId String    @map("shortlink_id")
+  clickedAt   DateTime  @default(now()) @map("clicked_at")
+  ipAddress   String?   @map("ip_address") @db.VarChar(45)
+  userAgent   String?   @map("user_agent")
+  referrer    String?
+  country     String?   @db.VarChar(2)
+  city        String?   @db.VarChar(100)
+  deviceType  String?   @map("device_type") @db.VarChar(20)
+  browser     String?   @db.VarChar(50)
+  shortlink   Shortlink @relation(fields: [shortlinkId], references: [id], onDelete: Cascade)
+
   @@index([shortlinkId])
   @@index([clickedAt])
   @@map("shortlink_clicks")
 }
 
-// Media library
 model Media {
-  id          String   @id @default(uuid())
-  filename    String   @db.VarChar(255)
-  url         String   @db.Text
-  fileSize    Int?     @map("file_size")
-  mimeType    String?  @map("mime_type") @db.VarChar(100)
-  uploadedBy  String?  @map("uploaded_by")
-  uploadedAt  DateTime @default(now()) @map("uploaded_at")
-  
-  // Relations
-  uploader    User?    @relation(fields: [uploadedBy], references: [id], onDelete: SetNull)
-  
+  id         String   @id @default(uuid())
+  filename   String   @db.VarChar(255)
+  url        String
+  fileSize   Int?     @map("file_size")
+  mimeType   String?  @map("mime_type") @db.VarChar(100)
+  uploadedBy String?  @map("uploaded_by")
+  uploadedAt DateTime @default(now()) @map("uploaded_at")
+  uploader   User?    @relation(fields: [uploadedBy], references: [id])
+
   @@map("media")
+}
+
+enum UserRole {
+  ADMIN
+  EDITOR
 }

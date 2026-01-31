@@ -1,11 +1,76 @@
-import { auth } from "@/lib/auth-config"
-import { redirect } from "next/navigation"
+"use client"
 
-export default async function AdminDashboardPage() {
-    const session = await auth()
+import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
 
-    if (!session) {
-        redirect("/admin/login")
+interface StatsData {
+    totalShortlinks: number
+    activeShortlinks: number
+    totalClicks: number
+    clicksToday: number
+    clicksThisWeek: number
+    clicksThisMonth: number
+}
+
+export default function AdminDashboardPage() {
+    const router = useRouter()
+    const [loading, setLoading] = useState(true)
+    const [stats, setStats] = useState<StatsData | null>(null)
+    const [user, setUser] = useState<{ name?: string; email?: string } | null>(null)
+    const [error, setError] = useState<string | null>(null)
+
+    useEffect(() => {
+        checkAuth()
+        fetchStats()
+    }, [])
+
+    const checkAuth = async () => {
+        try {
+            const res = await fetch('/api/auth/session')
+            if (!res.ok) {
+                router.push('/admin/login')
+                return
+            }
+            const session = await res.json()
+            setUser(session.user)
+        } catch (err) {
+            router.push('/admin/login')
+        }
+    }
+
+    const fetchStats = async () => {
+        try {
+            const res = await fetch('/api/analytics/stats')
+            const data = await res.json()
+
+            if (data.success) {
+                setStats(data.data)
+            } else {
+                setError('Failed to load statistics')
+            }
+        } catch (err) {
+            setError('Error fetching stats')
+            console.error('Stats error:', err)
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    const handleLogout = async () => {
+        try {
+            await fetch('/api/auth/signout', { method: 'POST' })
+            router.push('/admin/login')
+        } catch (err) {
+            console.error('Logout error:', err)
+        }
+    }
+
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center">
+                <div className="text-white text-xl">Loading...</div>
+            </div>
+        )
     }
 
     return (
@@ -18,38 +83,54 @@ export default async function AdminDashboardPage() {
                             Dashboard Admin
                         </h1>
                         <p className="text-gray-400">
-                            Selamat datang, {session.user?.name || session.user?.email}
+                            Selamat datang, {user?.name || user?.email || 'Admin'}
                         </p>
                     </div>
-                    <form action={async () => {
-                        "use server"
-                        const { signOut } = await import("@/lib/auth-config")
-                        await signOut({ redirectTo: "/admin/login" })
-                    }}>
-                        <button className="px-4 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-lg transition-colors">
-                            Logout
-                        </button>
-                    </form>
+                    <button
+                        onClick={handleLogout}
+                        className="px-4 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-lg transition-colors"
+                    >
+                        Logout
+                    </button>
                 </div>
+
+                {/* Error State */}
+                {error && (
+                    <div className="mb-6 bg-red-500/10 border border-red-500/20 rounded-xl p-4 text-red-400">
+                        {error}
+                    </div>
+                )}
 
                 {/* Stats Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                     <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-xl p-6">
                         <div className="text-cyan-400 font-semibold mb-2">Total Shortlinks</div>
-                        <div className="text-3xl font-bold text-white">0</div>
-                        <div className="text-sm text-gray-400 mt-1">Coming soon...</div>
+                        <div className="text-3xl font-bold text-white">
+                            {stats?.totalShortlinks?.toLocaleString() || 0}
+                        </div>
+                        <div className="text-sm text-gray-400 mt-1">
+                            {stats?.activeShortlinks || 0} active
+                        </div>
                     </div>
 
                     <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-xl p-6">
                         <div className="text-emerald-400 font-semibold mb-2">Total Clicks</div>
-                        <div className="text-3xl font-bold text-white">0</div>
-                        <div className="text-sm text-gray-400 mt-1">Coming soon...</div>
+                        <div className="text-3xl font-bold text-white">
+                            {stats?.totalClicks?.toLocaleString() || 0}
+                        </div>
+                        <div className="text-sm text-gray-400 mt-1">
+                            {stats?.clicksThisWeek?.toLocaleString() || 0} this week
+                        </div>
                     </div>
 
                     <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-xl p-6">
                         <div className="text-purple-400 font-semibold mb-2">Clicks Today</div>
-                        <div className="text-3xl font-bold text-white">0</div>
-                        <div className="text-sm text-gray-400 mt-1">Coming soon...</div>
+                        <div className="text-3xl font-bold text-white">
+                            {stats?.clicksToday?.toLocaleString() || 0}
+                        </div>
+                        <div className="text-sm text-gray-400 mt-1">
+                            {stats?.clicksThisMonth?.toLocaleString() || 0} this month
+                        </div>
                     </div>
                 </div>
 
@@ -81,38 +162,6 @@ export default async function AdminDashboardPage() {
                             <div className="text-rose-400 font-semibold mb-1">👥 User Management</div>
                             <div className="text-sm text-gray-400">Manage admin and editor users</div>
                         </a>
-                    </div>
-                </div>
-
-                {/* Development Status */}
-                <div className="mt-8 bg-yellow-500/10 border border-yellow-500/20 rounded-xl p-6">
-                    <div className="flex items-start gap-3">
-                        <div className="text-2xl">🚧</div>
-                        <div>
-                            <h3 className="text-yellow-400 font-semibold mb-2">Development Progress - Day 2/21</h3>
-                            <div className="text-gray-300 text-sm space-y-1">
-                                <div className="flex items-center gap-2">
-                                    <span className="text-green-400">✓</span>
-                                    <span>Authentication system implemented</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <span className="text-green-400">✓</span>
-                                    <span>Admin login functional</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <span className="text-yellow-400">⟳</span>
-                                    <span>Database setup (next)</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <span className="text-gray-500">○</span>
-                                    <span>Content editor (Week 2)</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <span className="text-gray-500">○</span>
-                                    <span>Shortlink management (Week 2)</span>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
