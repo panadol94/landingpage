@@ -15,21 +15,29 @@ async function main() {
         where: { email: adminEmail }
     })
 
-    if (existingAdmin) {
-        console.log('✓ Admin user already exists')
-        return
-    }
-
     const hashedPassword = await hashPassword(adminPassword)
 
-    const admin = await prisma.user.create({
-        data: {
-            email: adminEmail,
-            passwordHash: hashedPassword,
-            name: 'Admin',
-            role: 'ADMIN'
-        }
-    })
+    let admin
+    if (existingAdmin) {
+        console.log('✓ Admin user exists - updating password...')
+        admin = await prisma.user.update({
+            where: { email: adminEmail },
+            data: {
+                passwordHash: hashedPassword
+            }
+        })
+        console.log('✅ Admin password updated!')
+    } else {
+        admin = await prisma.user.create({
+            data: {
+                email: adminEmail,
+                passwordHash: hashedPassword,
+                name: 'Admin',
+                role: 'ADMIN'
+            }
+        })
+        console.log('✅ Admin user created')
+    }
 
     console.log('✅ Admin user created:')
     console.log(`   Email: ${admin.email}`)
