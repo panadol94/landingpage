@@ -18,7 +18,8 @@ model User {
   lastLogin      DateTime?        @map("last_login")
   contentUpdates LandingContent[]
   mediaUploads   Media[]
-  shortlinks     Shortlink[]
+  // REMOVED: shortlinks relation (now unlinked from User)
+  // shortlinks     Shortlink[]
 
   @@map("users")
 }
@@ -50,7 +51,8 @@ model Shortlink {
   createdAt   DateTime         @default(now()) @map("created_at")
   updatedAt   DateTime         @default(now()) @updatedAt @map("updated_at")
   clicks      ShortlinkClick[]
-  creator     User?            @relation(fields: [createdBy], references: [id])
+  // REMOVED: creator relation to allow null/invalid user IDs
+  // creator     User?            @relation(fields: [createdBy], references: [id])
 
   @@index([code])
   @@index([isActive])
