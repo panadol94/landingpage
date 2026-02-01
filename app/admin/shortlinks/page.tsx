@@ -22,6 +22,7 @@ export default function ShortlinksPage() {
     const [showQRModal, setShowQRModal] = useState(false)
     const [selectedLink, setSelectedLink] = useState<Shortlink | null>(null)
     const [qrCodeDataUrl, setQrCodeDataUrl] = useState('')
+    const [createdShortlink, setCreatedShortlink] = useState<string | null>(null)
     const [formData, setFormData] = useState({
         code: '',
         destination: '',
@@ -58,8 +59,8 @@ export default function ShortlinksPage() {
 
             if (res.ok) {
                 toast.success('✅ Shortlink berjaya dicipta!')
-                setShowCreateModal(false)
-                setFormData({ code: '', destination: '', title: '' })
+                // Show success state with created link
+                setCreatedShortlink(formData.code)
                 fetchShortlinks()
             } else {
                 toast.error(`❌ ${data.error}`)
@@ -68,6 +69,13 @@ export default function ShortlinksPage() {
             toast.error('❌ Ralat mencipta shortlink')
         }
     }
+
+    const closeCreateModal = () => {
+        setShowCreateModal(false)
+        setCreatedShortlink(null)
+        setFormData({ code: '', destination: '', title: '' })
+    }
+
 
     const handleDelete = async (id: string, code: string) => {
         if (!confirm(`Padam shortlink "${code}"?`)) return
@@ -157,70 +165,130 @@ export default function ShortlinksPage() {
                 {showCreateModal && (
                     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
                         <div className="bg-slate-900 border border-white/10 rounded-2xl p-8 max-w-md w-full mx-4">
-                            <h2 className="text-2xl font-bold text-white mb-6">Create Shortlink</h2>
-
-                            <form onSubmit={handleCreate} className="space-y-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                                        Code *
-                                    </label>
-                                    <div className="flex items-center gap-2">
-                                        <span className="text-gray-400">masuk10.com/</span>
-                                        <input
-                                            type="text"
-                                            value={formData.code}
-                                            onChange={(e) => setFormData({ ...formData, code: e.target.value })}
-                                            required
-                                            placeholder="fb1"
-                                            className="flex-1 px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:border-cyan-500"
-                                        />
+                            {createdShortlink ? (
+                                // Success State
+                                <>
+                                    <div className="text-center mb-6">
+                                        <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                                            <span className="text-4xl">✅</span>
+                                        </div>
+                                        <h2 className="text-2xl font-bold text-white mb-2">Shortlink Berjaya Dicipta!</h2>
+                                        <p className="text-gray-400">Link anda sudah siap dan boleh digunakan</p>
                                     </div>
-                                    <p className="text-xs text-gray-500 mt-1">Alphanumeric and hyphens only</p>
-                                </div>
 
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                                        Destination URL *
-                                    </label>
-                                    <input
-                                        type="url"
-                                        value={formData.destination}
-                                        onChange={(e) => setFormData({ ...formData, destination: e.target.value })}
-                                        required
-                                        placeholder="https://example.com"
-                                        className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:border-cyan-500"
-                                    />
-                                </div>
+                                    <div className="space-y-4">
+                                        {/* Created Link Display */}
+                                        <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+                                            <div className="text-sm text-gray-400 mb-2">Your Shortlink:</div>
+                                            <div className="flex items-center gap-2">
+                                                <div className="flex-1 bg-black/30 rounded-lg px-4 py-3 font-mono text-cyan-400 text-lg break-all">
+                                                    {window.location.origin}/{createdShortlink}
+                                                </div>
+                                            </div>
+                                        </div>
 
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                                        Title (Optional)
-                                    </label>
-                                    <input
-                                        type="text"
-                                        value={formData.title}
-                                        onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                                        placeholder="Facebook Group"
-                                        className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:border-cyan-500"
-                                    />
-                                </div>
+                                        {/* Copy Button */}
+                                        <button
+                                            onClick={() => copyToClipboard(createdShortlink)}
+                                            className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-cyan-500 hover:bg-cyan-600 text-white font-bold rounded-xl transition-all shadow-lg hover:shadow-cyan-500/50"
+                                        >
+                                            <Copy size={20} />
+                                            Copy Link
+                                        </button>
 
-                                <div className="flex gap-3 pt-4">
-                                    <button
-                                        type="submit"
-                                        className="flex-1 py-2 bg-cyan-500 hover:bg-cyan-600 text-white rounded-lg transition-colors"
-                                    >
-                                        Create
-                                    </button>
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowCreateModal(false)}
-                                        className="flex-1 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors"
-                                    >
-                                        Cancel
-                                    </button>
-                                </div>
-                            </form>
+                                        {/* QR Code Button */}
+                                        <button
+                                            onClick={() => {
+                                                const link = shortlinks.find(l => l.code === createdShortlink)
+                                                if (link) {
+                                                    handleShowQR(link)
+                                                    closeCreateModal()
+                                                }
+                                            }}
+                                            className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-colors"
+                                        >
+                                            <QrCode size={20} />
+                                            Generate QR Code
+                                        </button>
+
+                                        {/* Done Button */}
+                                        <button
+                                            onClick={closeCreateModal}
+                                            className="w-full px-6 py-3 bg-white/5 hover:bg-white/10 text-gray-300 rounded-xl transition-colors"
+                                        >
+                                            Done
+                                        </button>
+                                    </div>
+                                </>
+                            ) : (
+                                // Create Form
+                                <>
+                                    <h2 className="text-2xl font-bold text-white mb-6">Create Shortlink</h2>
+
+                                    <form onSubmit={handleCreate} className="space-y-4">
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-300 mb-2">
+                                                Code *
+                                            </label>
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-gray-400">www.tipsmega888.com/</span>
+                                                <input
+                                                    type="text"
+                                                    value={formData.code}
+                                                    onChange={(e) => setFormData({ ...formData, code: e.target.value })}
+                                                    required
+                                                    placeholder="fb1"
+                                                    className="flex-1 px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:border-cyan-500"
+                                                />
+                                            </div>
+                                            <p className="text-xs text-gray-500 mt-1">Alphanumeric and hyphens only</p>
+                                        </div>
+
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-300 mb-2">
+                                                Destination URL *
+                                            </label>
+                                            <input
+                                                type="url"
+                                                value={formData.destination}
+                                                onChange={(e) => setFormData({ ...formData, destination: e.target.value })}
+                                                required
+                                                placeholder="https://example.com"
+                                                className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:border-cyan-500"
+                                            />
+                                        </div>
+
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-300 mb-2">
+                                                Title (Optional)
+                                            </label>
+                                            <input
+                                                type="text"
+                                                value={formData.title}
+                                                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                                                placeholder="Facebook Group"
+                                                className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:border-cyan-500"
+                                            />
+                                        </div>
+
+                                        <div className="flex gap-3 pt-4">
+                                            <button
+                                                type="submit"
+                                                className="flex-1 py-2 bg-cyan-500 hover:bg-cyan-600 text-white rounded-lg transition-colors"
+                                            >
+                                                Create
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={closeCreateModal}
+                                                className="flex-1 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors"
+                                            >
+                                                Cancel
+                                            </button>
+                                        </div>
+                                    </form>
+                                </>
+                            )}
                         </div>
                     </div>
                 )}
