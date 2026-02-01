@@ -19,14 +19,6 @@ interface Media {
     }
 }
 
-interface MediaResponse {
-    media: Media[]
-    total: number
-    page: number
-    limit: number
-    totalPages: number
-}
-
 export default function MediaLibraryPage() {
     const [media, setMedia] = useState<Media[]>([])
     const [loading, setLoading] = useState(true)

@@ -20,23 +20,23 @@ export default function AdminDashboardPage() {
     const [error, setError] = useState<string | null>(null)
 
     useEffect(() => {
+        const checkAuth = async () => {
+            try {
+                const res = await fetch('/api/auth/session')
+                if (!res.ok) {
+                    router.push('/admin/login')
+                    return
+                }
+                const session = await res.json()
+                setUser(session.user)
+            } catch {
+                router.push('/admin/login')
+            }
+        }
+
         checkAuth()
         fetchStats()
-    }, [])
-
-    const checkAuth = async () => {
-        try {
-            const res = await fetch('/api/auth/session')
-            if (!res.ok) {
-                router.push('/admin/login')
-                return
-            }
-            const session = await res.json()
-            setUser(session.user)
-        } catch (err) {
-            router.push('/admin/login')
-        }
-    }
+    }, [router])
 
     const fetchStats = async () => {
         try {
@@ -141,6 +141,11 @@ export default function AdminDashboardPage() {
                         <a href="/admin/content" className="block p-4 bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/20 rounded-lg text-left transition-colors group">
                             <div className="text-cyan-400 font-semibold mb-1">📝 Edit Landing Page</div>
                             <div className="text-sm text-gray-400">Update content, images, and text</div>
+                        </a>
+
+                        <a href="/admin/themes" className="block p-4 bg-pink-500/10 hover:bg-pink-500/20 border border-pink-500/20 rounded-lg text-left transition-colors group">
+                            <div className="text-pink-400 font-semibold mb-1">🎨 Theme Settings</div>
+                            <div className="text-sm text-gray-400">Choose and customize landing page themes</div>
                         </a>
 
                         <a href="/admin/shortlinks" className="block p-4 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 rounded-lg text-left transition-colors group">

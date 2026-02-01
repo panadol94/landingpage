@@ -54,7 +54,7 @@ export default function UsersPage() {
             } else {
                 toast.error(`❌ ${data.error}`)
             }
-        } catch (error) {
+        } catch {
             toast.error('❌ Failed to fetch users')
         } finally {
             setLoading(false)
@@ -89,7 +89,7 @@ export default function UsersPage() {
             } else {
                 toast.error(`❌ ${data.error}`)
             }
-        } catch (error) {
+        } catch {
             toast.error('❌ Failed to delete user')
         }
     }

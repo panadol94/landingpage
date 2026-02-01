@@ -60,7 +60,7 @@ export default function PasswordChangeModal({
             } else {
                 toast.error(`❌ ${data.error}`)
             }
-        } catch (error) {
+        } catch {
             toast.error('❌ An error occurred')
         } finally {
             setLoading(false)

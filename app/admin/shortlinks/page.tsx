@@ -252,6 +252,7 @@ export default function ShortlinksPage() {
                                 {/* QR Code Image */}
                                 <div className="flex justify-center p-6 bg-white rounded-xl">
                                     {qrCodeDataUrl ? (
+                                        /* eslint-disable-next-line @next/next/no-img-element */
                                         <img
                                             src={qrCodeDataUrl}
                                             alt={`QR Code for ${selectedLink.code}`}

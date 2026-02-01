@@ -29,7 +29,7 @@ export default function AdminLoginPage() {
                 router.push("/admin/dashboard")
                 router.refresh()
             }
-        } catch (err) {
+        } catch {
             setError("Ralat berlaku. Sila cuba lagi.")
         } finally {
             setLoading(false)

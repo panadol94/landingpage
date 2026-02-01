@@ -4,7 +4,7 @@ import { checkAdminRole } from '@/lib/check-admin'
 import { hashPassword, validatePassword } from '@/lib/password'
 
 // GET /api/users - List all users
-export async function GET(request: NextRequest) {
+export async function GET() {
     // Check admin authorization
     const adminCheck = await checkAdminRole()
     if (!adminCheck.authorized) {

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { checkAdminRole, getCurrentUser } from '@/lib/check-admin'
+import { getCurrentUser } from '@/lib/check-admin'
 import { hashPassword, validatePassword } from '@/lib/password'
 
 // PATCH /api/users/[id]/password - Change user password

@@ -88,6 +88,43 @@ model Media {
   @@map("media")
 }
 
+model Theme {
+  id          String   @id @default(uuid())
+  name        String   @unique @db.VarChar(50)
+  displayName String   @map("display_name") @db.VarChar(100)
+  description String?
+  previewUrl  String?  @map("preview_url")
+  
+  // Base theme configuration stored as JSON
+  cssVars     Json     @map("css_vars")      // CSS variables for the theme
+  animations  Json?                          // Animation configurations
+  typography  Json?                          // Font families, sizes, weights
+  
+  isActive    Boolean  @default(false) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@map("themes")
+}
+
+model ThemeCustomization {
+  id            String   @id @default(uuid())
+  activeThemeId String   @map("active_theme_id")
+  
+  // Full customization fields - all stored as JSON for flexibility
+  customColors     Json?    @map("custom_colors")      // Color overrides
+  customFonts      Json?    @map("custom_fonts")       // Typography overrides
+  customSpacing    Json?    @map("custom_spacing")     // Spacing/padding overrides
+  customAnimations Json?    @map("custom_animations")  // Animation speed/effects overrides
+  customEffects    Json?    @map("custom_effects")     // Special effects (blur, shadows, etc)
+  
+  updatedBy String?  @map("updated_by")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  
+  @@unique([id])
+  @@map("theme_customizations")
+}
+
 enum UserRole {
   ADMIN
   EDITOR

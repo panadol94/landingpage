@@ -77,6 +77,40 @@ async function main() {
     }
 
     console.log('✅ Default content created')
+
+    // Seed premium themes
+    console.log('🎨 Seeding premium themes...')
+
+    // Use require for CommonJS compatibility
+    const themesModule = require('../lib/themes')
+    const { THEMES, themeToCSSVars } = themesModule
+
+    for (const themeConfig of THEMES) {
+        const existing = await prisma.theme.findUnique({
+            where: { name: themeConfig.name }
+        })
+
+        if (existing) {
+            console.log(`  ✓ Theme "${themeConfig.displayName}" already exists`)
+            continue
+        }
+
+        await prisma.theme.create({
+            data: {
+                name: themeConfig.name,
+                displayName: themeConfig.displayName,
+                description: themeConfig.description || '',
+                previewUrl: themeConfig.previewUrl || null,
+                cssVars: themeToCSSVars(themeConfig) as any,
+                animations: themeConfig.animations as any,
+                typography: themeConfig.typography as any,
+                isActive: themeConfig.name === 'cyber_neon' // Default to Cyber Neon theme
+            }
+        })
+        console.log(`  ✅ Created theme: ${themeConfig.displayName}`)
+    }
+
+    console.log('✅ Premium themes seeded')
     console.log('\n🎉 Seeding complete!')
 }
 
