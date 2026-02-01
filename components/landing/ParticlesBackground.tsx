@@ -20,38 +20,38 @@ export default function ParticlesBackground() {
                         value: "transparent",
                     },
                 },
-                fpsLimit: 120,
+                fpsLimit: 30, // Reduced from 120 for better performance
                 interactivity: {
                     events: {
                         onClick: {
-                            enable: true,
+                            enable: false, // Disabled to reduce CPU usage
                             mode: "push",
                         },
                         onHover: {
-                            enable: true,
+                            enable: false, // Disabled repulse for performance
                             mode: "repulse",
                         },
                         resize: true,
                     },
                     modes: {
                         push: {
-                            quantity: 4,
+                            quantity: 2,
                         },
                         repulse: {
-                            distance: 100,
-                            duration: 0.4,
+                            distance: 80,
+                            duration: 0.3,
                         },
                     },
                 },
                 particles: {
                     color: {
-                        value: ["#06b6d4", "#10b981", "#8b5cf6", "#ec4899"],
+                        value: ["#06b6d4", "#8b5cf6"], // Reduced colors
                     },
                     links: {
                         color: "#06b6d4",
-                        distance: 150,
+                        distance: 120, // Reduced from 150
                         enable: true,
-                        opacity: 0.2,
+                        opacity: 0.15, // Reduced opacity
                         width: 1,
                     },
                     move: {
@@ -61,15 +61,15 @@ export default function ParticlesBackground() {
                             default: "bounce",
                         },
                         random: false,
-                        speed: 1,
+                        speed: 0.5, // Slower movement for less CPU
                         straight: false,
                     },
                     number: {
                         density: {
                             enable: true,
-                            area: 800,
+                            area: 1000, // Increased area = fewer particles per space
                         },
-                        value: 60,
+                        value: 25, // Reduced from 60 for performance
                     },
                     opacity: {
                         value: 0.3,

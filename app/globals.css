@@ -44,14 +44,14 @@ body {
   background: linear-gradient(90deg,
       #06b6d4,
       #8b5cf6,
-      #ec4899,
       #06b6d4);
   background-size: 200% 200%;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: gradient-shift 5s ease infinite;
+  animation: gradient-shift 8s ease infinite;
 }
+
 
 /* Premium Glow */
 .premium-glow {

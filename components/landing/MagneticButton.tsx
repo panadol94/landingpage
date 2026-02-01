@@ -14,7 +14,7 @@ export default function MagneticButton({
     children,
     href,
     className = "",
-    strength = 0.3
+    strength = 0.15 // Reduced for better VPS performance
 }: MagneticButtonProps) {
     const [position, setPosition] = useState({ x: 0, y: 0 })
     const buttonRef = useRef<HTMLAnchorElement>(null)
@@ -53,12 +53,12 @@ export default function MagneticButton({
             }}
             transition={{
                 type: "spring",
-                stiffness: 150,
-                damping: 15,
-                mass: 0.1
+                stiffness: 100, // Reduced from 150
+                damping: 20, // Increased from 15  
+                mass: 0.2 // Increased from 0.1
             }}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            whileHover={{ scale: 1.03 }} // Reduced from 1.05
+            whileTap={{ scale: 0.97 }} // Less dramatic
             className={`inline-block relative group ${className}`}
         >
             {/* Ripple effect on tap */}
