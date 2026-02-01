@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion"
 import { Sparkles, TrendingUp, Users } from "lucide-react"
-import ParticlesBackground from "./ParticlesBackground"
+// import ParticlesBackground from "./ParticlesBackground" // Disabled for performance
 import MagneticButton from "./MagneticButton"
 
 interface HeroProps {
@@ -26,8 +26,8 @@ export default function Hero({
 }: HeroProps) {
     return (
         <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-            {/* Premium Particles Background */}
-            <ParticlesBackground />
+            {/* Premium Particles Background - Disabled for VPS performance */}
+            {/* <ParticlesBackground /> */}
 
             {/* Animated Background Orbs */}
             <div className="absolute inset-0 overflow-hidden">

@@ -3,7 +3,7 @@
 import { motion } from "framer-motion"
 import { useInView } from "react-intersection-observer"
 import { Star } from "lucide-react"
-import Tilt from 'react-parallax-tilt'
+// import Tilt from 'react-parallax-tilt' // Disabled for performance
 
 export default function Testimonials() {
     const { ref, inView } = useInView({
