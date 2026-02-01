@@ -396,8 +396,8 @@ export default function ShortlinksPage() {
                     </div>
                 )}
 
-                {/* Shortlinks Table */}
-                <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-xl overflow-hidden">
+                {/* Shortlinks List - Desktop Table */}
+                <div className="hidden md:block bg-white/5 backdrop-blur-lg border border-white/10 rounded-xl overflow-hidden">
                     <table className="w-full">
                         <thead className="bg-white/5">
                             <tr className="text-left">
@@ -486,6 +486,91 @@ export default function ShortlinksPage() {
                             )}
                         </tbody>
                     </table>
+                </div>
+
+                {/* Shortlinks List - Mobile Cards */}
+                <div className="md:hidden space-y-4">
+                    {shortlinks.length === 0 ? (
+                        <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-xl p-12 text-center text-gray-400">
+                            No shortlinks yet. Create your first one!
+                        </div>
+                    ) : (
+                        shortlinks.map((link) => (
+                            <div key={link.id} className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-xl p-4">
+                                {/* Header with Code and Status */}
+                                <div className="flex items-start justify-between mb-3">
+                                    <div className="flex-1">
+                                        <div className="text-cyan-400 font-mono font-semibold text-lg">/{link.code}</div>
+                                        {link.title && <div className="text-xs text-gray-500 mt-1">{link.title}</div>}
+                                    </div>
+                                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${link.isActive
+                                        ? 'bg-emerald-500/20 text-emerald-400'
+                                        : 'bg-gray-500/20 text-gray-400'
+                                        }`}>
+                                        {link.isActive ? 'Active' : 'Inactive'}
+                                    </span>
+                                </div>
+
+                                {/* Destination */}
+                                <div className="mb-3">
+                                    <div className="text-xs text-gray-400 mb-1">Destination:</div>
+                                    <a
+                                        href={link.destination}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-gray-300 hover:text-cyan-400 flex items-center gap-1 text-sm break-all"
+                                    >
+                                        {link.destination}
+                                        <ExternalLink size={14} className="flex-shrink-0" />
+                                    </a>
+                                </div>
+
+                                {/* Clicks */}
+                                <div className="mb-4">
+                                    <div className="flex items-center gap-2 text-white text-sm">
+                                        <BarChart3 size={16} className="text-emerald-400" />
+                                        <span>{link._count.clicks} clicks</span>
+                                    </div>
+                                </div>
+
+                                {/* Actions */}
+                                <div className="flex items-center gap-2 pt-3 border-t border-white/10">
+                                    <button
+                                        onClick={() => handleShowQR(link)}
+                                        className="flex-1 flex items-center justify-center gap-2 p-2 hover:bg-white/10 rounded-lg transition-colors text-cyan-400"
+                                        title="Show QR Code"
+                                    >
+                                        <QrCode size={18} />
+                                        <span className="text-sm">QR</span>
+                                    </button>
+                                    <button
+                                        onClick={() => copyToClipboard(link.code)}
+                                        className="flex-1 flex items-center justify-center gap-2 p-2 hover:bg-white/10 rounded-lg transition-colors text-cyan-400"
+                                        title="Copy URL"
+                                    >
+                                        <Copy size={18} />
+                                        <span className="text-sm">Copy</span>
+                                    </button>
+                                    <button
+                                        onClick={() => handleEdit(link)}
+                                        className="flex-1 flex items-center justify-center gap-2 p-2 hover:bg-white/10 rounded-lg transition-colors text-yellow-400"
+                                        title="Edit"
+                                    >
+                                        <Pencil size={18} />
+                                        <span className="text-sm">Edit</span>
+                                    </button>
+                                    <button
+                                        onClick={() => handleDelete(link.id, link.code)}
+                                        className="flex-1 flex items-center justify-center gap-2 p-2 hover:bg-white/10 rounded-lg transition-colors text-red-400"
+                                        title="Delete"
+                                    >
+                                        <Trash2 size={18} />
+                                        <span className="text-sm">Delete</span>
+                                    </button>
+                                </div>
+                            </div>
+                        ))
+                    )}
                 </div>
 
                 {/* Back Button */}
