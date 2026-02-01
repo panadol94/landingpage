@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Plus, Trash2, ExternalLink, Copy, BarChart3, QrCode, Download, X } from "lucide-react"
+import { Plus, Trash2, ExternalLink, Copy, BarChart3, QrCode, Download, X, Pencil } from "lucide-react"
 import { generateQRCode, downloadQRCode } from "@/lib/qrcode"
 import toast from "react-hot-toast"
 
@@ -23,6 +23,7 @@ export default function ShortlinksPage() {
     const [selectedLink, setSelectedLink] = useState<Shortlink | null>(null)
     const [qrCodeDataUrl, setQrCodeDataUrl] = useState('')
     const [createdShortlink, setCreatedShortlink] = useState<string | null>(null)
+    const [editingLink, setEditingLink] = useState<Shortlink | null>(null)
     const [formData, setFormData] = useState({
         code: '',
         destination: '',
@@ -70,9 +71,50 @@ export default function ShortlinksPage() {
         }
     }
 
+    const handleUpdate = async (e: React.FormEvent) => {
+        e.preventDefault()
+        if (!editingLink) return
+
+        try {
+            const res = await fetch(`/api/shortlinks/${editingLink.id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    destination: formData.destination,
+                    title: formData.title || null,
+                    isActive: editingLink.isActive
+                })
+            })
+
+            if (res.ok) {
+                toast.success('✅ Shortlink berjaya dikemaskini!')
+                setEditingLink(null)
+                setShowCreateModal(false)
+                setFormData({ code: '', destination: '', title: '' })
+                fetchShortlinks()
+            } else {
+                const data = await res.json()
+                toast.error(`❌ ${data.error}`)
+            }
+        } catch {
+            toast.error('❌ Ralat mengemaskini shortlink')
+        }
+    }
+
+    const handleEdit = (link: Shortlink) => {
+        setEditingLink(link)
+        setFormData({
+            code: link.code,
+            destination: link.destination,
+            title: link.title || ''
+        })
+        setShowCreateModal(true)
+    }
+
     const closeCreateModal = () => {
         setShowCreateModal(false)
         setCreatedShortlink(null)
+        setEditingLink(null)
         setFormData({ code: '', destination: '', title: '' })
     }
 
@@ -221,11 +263,11 @@ export default function ShortlinksPage() {
                                     </div>
                                 </>
                             ) : (
-                                // Create Form
+                                // Create/Edit Form
                                 <>
-                                    <h2 className="text-2xl font-bold text-white mb-6">Create Shortlink</h2>
+                                    <h2 className="text-2xl font-bold text-white mb-6">{editingLink ? 'Edit Shortlink' : 'Create Shortlink'}</h2>
 
-                                    <form onSubmit={handleCreate} className="space-y-4">
+                                    <form onSubmit={editingLink ? handleUpdate : handleCreate} className="space-y-4">
                                         <div>
                                             <label className="block text-sm font-medium text-gray-300 mb-2">
                                                 Code *
@@ -238,10 +280,15 @@ export default function ShortlinksPage() {
                                                     onChange={(e) => setFormData({ ...formData, code: e.target.value })}
                                                     required
                                                     placeholder="fb1"
-                                                    className="flex-1 px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:border-cyan-500"
+                                                    disabled={!!editingLink}
+                                                    className="flex-1 px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:border-cyan-500 disabled:opacity-50 disabled:cursor-not-allowed"
                                                 />
                                             </div>
-                                            <p className="text-xs text-gray-500 mt-1">Alphanumeric and hyphens only</p>
+                                            {editingLink ? (
+                                                <p className="text-xs text-gray-500 mt-1">Code cannot be changed</p>
+                                            ) : (
+                                                <p className="text-xs text-gray-500 mt-1">Alphanumeric and hyphens only</p>
+                                            )}
                                         </div>
 
                                         <div>
@@ -276,7 +323,7 @@ export default function ShortlinksPage() {
                                                 type="submit"
                                                 className="flex-1 py-2 bg-cyan-500 hover:bg-cyan-600 text-white rounded-lg transition-colors"
                                             >
-                                                Create
+                                                {editingLink ? 'Update' : 'Create'}
                                             </button>
                                             <button
                                                 type="button"
@@ -417,6 +464,13 @@ export default function ShortlinksPage() {
                                                     title="Copy URL"
                                                 >
                                                     <Copy size={16} />
+                                                </button>
+                                                <button
+                                                    onClick={() => handleEdit(link)}
+                                                    className="p-2 hover:bg-white/10 rounded-lg transition-colors text-gray-400 hover:text-yellow-400"
+                                                    title="Edit"
+                                                >
+                                                    <Pencil size={16} />
                                                 </button>
                                                 <button
                                                     onClick={() => handleDelete(link.id, link.code)}
