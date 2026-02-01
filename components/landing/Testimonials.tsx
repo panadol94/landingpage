@@ -3,6 +3,7 @@
 import { motion } from "framer-motion"
 import { useInView } from "react-intersection-observer"
 import { Star } from "lucide-react"
+import Tilt from 'react-parallax-tilt'
 
 export default function Testimonials() {
     const { ref, inView } = useInView({
@@ -13,23 +14,23 @@ export default function Testimonials() {
     const testimonials = [
         {
             name: "Ahmad Razak",
-            role: "Active Member",
+            role: "Member Aktif",
             avatar: "👨‍💼",
-            text: "The statistical analysis tools helped me understand game patterns much better. Improved my decision-making accuracy by 85%!",
+            text: "Tips cara tangkap ikan memang power! Lepas belajar teknik dari komuniti ni, skill saya naik banyak. Recommended!",
             rating: 5
         },
         {
             name: "Siti Nurhaliza",
             role: "VIP Member",
             avatar: "👩‍💼",
-            text: "The analytics dashboard and data insights are incredible. This platform transformed how I approach game strategy!",
+            text: "Strategi buka kerang dekat seaworld yang diorang ajar tu memang betul. Sekarang dah faham pattern macam mana nak approach. Best sangat!",
             rating: 5
         },
         {
             name: "Kumar Rajesh",
             role: "Pro Member",
             avatar: "👨‍💻",
-            text: "Best gaming education community I've joined. The real-time insights and probability studies are extremely valuable!",
+            text: "Teknik beruang panjat pokok dapat madu tu genius! Community support sangat helpful, tips sentiasa update. Worth it join!",
             rating: 5
         }
     ]
@@ -45,10 +46,10 @@ export default function Testimonials() {
                     className="text-center mb-12"
                 >
                     <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-                        What Our Members Say
+                        Apa Kata Member Kami
                     </h2>
                     <p className="text-xl text-gray-400">
-                        Join thousands of satisfied members
+                        Sertai ribuan members yang berpuas hati
                     </p>
                 </motion.div>
 

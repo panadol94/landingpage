@@ -2,8 +2,7 @@
 
 import { motion } from "framer-motion"
 import { useInView } from "react-intersection-observer"
-import { useState, useEffect } from "react"
-import { Clock, Gift, CheckCircle, Shield } from "lucide-react"
+import { Gift, CheckCircle, Shield } from "lucide-react"
 
 interface CTASectionProps {
     ctaUrl?: string
@@ -15,30 +14,10 @@ export default function CTASection({ ctaUrl = "https://wa.me/60123456789" }: CTA
         threshold: 0.1
     })
 
-    // Countdown timer (15 minutes)
-    const [timeLeft, setTimeLeft] = useState({ minutes: 14, seconds: 59 })
-
-    useEffect(() => {
-        const timer = setInterval(() => {
-            setTimeLeft((prev) => {
-                if (prev.seconds > 0) {
-                    return { ...prev, seconds: prev.seconds - 1 }
-                } else if (prev.minutes > 0) {
-                    return { minutes: prev.minutes - 1, seconds: 59 }
-                } else {
-                    // Reset to 15 minutes when it reaches 0
-                    return { minutes: 14, seconds: 59 }
-                }
-            })
-        }, 1000)
-
-        return () => clearInterval(timer)
-    }, [])
-
     const benefits = [
-        { icon: Gift, text: "Free Premium Trial (7 Days)" },
-        { icon: CheckCircle, text: "Full access to analytics dashboard" },
-        { icon: Shield, text: "Personal strategy consultation" }
+        { icon: Gift, text: "Tips Eksklusif Setiap Hari" },
+        { icon: CheckCircle, text: "Strategi Gaming Terkini" },
+        { icon: Shield, text: "Community Support 24/7" }
     ]
 
     return (
@@ -62,35 +41,24 @@ export default function CTASection({ ctaUrl = "https://wa.me/60123456789" }: CTA
                     >
                         <div className="inline-block bg-gradient-to-r from-orange-500/20 to-red-500/20 border border-orange-500/30 rounded-full px-6 py-2">
                             <span className="text-2xl">🔥</span>
-                            <span className="ml-2 text-orange-400 font-bold">FREE STRATEGY WEBINAR</span>
+                            <span className="ml-2 text-orange-400 font-bold">KOMUNITI EKSKLUSIF</span>
                             <span className="ml-2 text-2xl">🔥</span>
                         </div>
                     </motion.div>
 
-                    {/* Countdown */}
+                    {/* Main Headline */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={inView ? { opacity: 1, y: 0 } : {}}
                         transition={{ duration: 0.6, delay: 0.3 }}
                         className="text-center mb-8"
                     >
-                        <p className="text-lg text-gray-300 mb-4">Next webinar starts in</p>
-                        <div className="flex items-center justify-center gap-4 mb-2">
-                            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl px-6 py-4">
-                                <div className="text-5xl font-bold text-white tabular-nums">
-                                    {timeLeft.minutes.toString().padStart(2, '0')}
-                                </div>
-                                <div className="text-sm text-gray-400 mt-1">Minutes</div>
-                            </div>
-                            <div className="text-4xl text-white">:</div>
-                            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl px-6 py-4">
-                                <div className="text-5xl font-bold text-white tabular-nums">
-                                    {timeLeft.seconds.toString().padStart(2, '0')}
-                                </div>
-                                <div className="text-sm text-gray-400 mt-1">Seconds</div>
-                            </div>
-                        </div>
-                        <p className="text-gray-400">to unlock these benefits</p>
+                        <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+                            Sertai Komuniti Kami Hari Ini
+                        </h2>
+                        <p className="text-xl text-gray-300">
+                            Dapatkan akses kepada tips eksklusif & strategi terkini setiap hari
+                        </p>
                     </motion.div>
 
                     {/* Benefits */}
@@ -127,7 +95,7 @@ export default function CTASection({ ctaUrl = "https://wa.me/60123456789" }: CTA
                         className="text-center mb-8"
                     >
                         <p className="text-xl font-bold text-cyan-400 mb-2">
-                            📊 Join 5,000+ members learning daily!
+                            📊 Sertai 5,000+ members yang belajar strategi setiap hari!
                         </p>
                     </motion.div>
 
@@ -148,7 +116,7 @@ export default function CTASection({ ctaUrl = "https://wa.me/60123456789" }: CTA
                         >
                             <span className="flex items-center justify-center gap-3">
                                 <span className="text-3xl">💬</span>
-                                <span>JOIN WHATSAPP GROUP - FREE</span>
+                                <span>SERTAI WHATSAPP GROUP</span>
                             </span>
                         </motion.a>
                     </motion.div>

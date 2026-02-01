@@ -2,6 +2,8 @@
 
 import { motion } from "framer-motion"
 import { Sparkles, TrendingUp, Users } from "lucide-react"
+import ParticlesBackground from "./ParticlesBackground"
+import MagneticButton from "./MagneticButton"
 
 interface HeroProps {
     title?: string
@@ -14,16 +16,19 @@ interface HeroProps {
 }
 
 export default function Hero({
-    title = "MASUK10",
-    subtitle = "Advanced Gaming Analytics & Strategy Platform",
-    description = "Join 5,000+ members learning data-driven game analysis, statistical insights, and professional strategy development",
-    ctaText = "JOIN FREE ANALYTICS COMMUNITY",
+    title = "Masuk10",
+    subtitle = "Master Game Analytics & Data Strategy",
+    description = "Join 5,000+ learners in our advanced gaming analytics academy. Learn data-driven strategies, pattern recognition, and statistical analysis",
+    ctaText = "START FREE TRIAL",
     ctaUrl = "https://wa.me/60123456789",
     memberCount = "5,234+",
     rating = "4.9/5"
 }: HeroProps) {
     return (
         <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+            {/* Premium Particles Background */}
+            <ParticlesBackground />
+
             {/* Animated Background Orbs */}
             <div className="absolute inset-0 overflow-hidden">
                 <motion.div
@@ -74,9 +79,9 @@ export default function Hero({
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.2 }}
-                    className="text-5xl md:text-7xl font-bold mb-6"
+                    className="text-6xl md:text-8xl font-black mb-6"
                 >
-                    <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent animate-gradient">
+                    <span className="gradient-text premium-glow">
                         {title}
                     </span>
                 </motion.h1>
@@ -105,19 +110,19 @@ export default function Hero({
                             <div className="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center flex-shrink-0 mt-1">
                                 <span className="text-green-400 text-sm">✓</span>
                             </div>
-                            <span className="text-gray-300">Data-driven game analysis</span>
+                            <span className="text-gray-300">Professional analytics dashboard</span>
                         </div>
                         <div className="flex items-start gap-3">
                             <div className="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center flex-shrink-0 mt-1">
                                 <span className="text-green-400 text-sm">✓</span>
                             </div>
-                            <span className="text-gray-300">Advanced analytics tools</span>
+                            <span className="text-gray-300">Expert strategy tutorials</span>
                         </div>
                         <div className="flex items-start gap-3">
                             <div className="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center flex-shrink-0 mt-1">
                                 <span className="text-green-400 text-sm">✓</span>
                             </div>
-                            <span className="text-gray-300">Real-time statistical insights</span>
+                            <span className="text-gray-300">Community learning hub</span>
                         </div>
                     </div>
                 </motion.div>
@@ -129,24 +134,14 @@ export default function Hero({
                     transition={{ duration: 0.8, delay: 0.8 }}
                     className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8"
                 >
-                    <motion.a
+                    <MagneticButton
                         href={ctaUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="group relative px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold rounded-xl transition-all shadow-lg shadow-green-500/50 hover:shadow-green-500/70 flex items-center gap-2"
+                        className="px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold rounded-xl transition-all flex items-center gap-2"
                     >
                         <span className="relative z-10 flex items-center gap-2">
                             💬 {ctaText}
                         </span>
-                        <motion.div
-                            className="absolute inset-0 bg-white/20 rounded-xl"
-                            initial={{ scale: 0, opacity: 0 }}
-                            whileHover={{ scale: 1, opacity: 1 }}
-                            transition={{ duration: 0.3 }}
-                        />
-                    </motion.a>
+                    </MagneticButton>
 
                     <motion.button
                         whileHover={{ scale: 1.05 }}

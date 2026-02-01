@@ -68,15 +68,61 @@ export default function HomePage() {
         <CTASection ctaUrl={hero.cta_url} />
 
         {/* Footer */}
-        <footer className="container mx-auto px-4 py-12 border-t border-white/10">
-          <div className="text-center space-y-4">
-            <p className="text-gray-400">
-              {footer.tagline || '© 2026 Masuk10. Professional Gaming Analytics & Education Platform.'}
-            </p>
-            <div className="flex justify-center gap-4">
-              <a href="/admin" className="text-gray-500 hover:text-cyan-400 transition-colors text-sm">
-                Admin
-              </a>
+        <footer className="relative overflow-hidden">
+          {/* Premium gradient border */}
+          <div className="h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent" />
+
+          <div className="container mx-auto px-4 py-12">
+            <div className="max-w-4xl mx-auto space-y-8">
+              {/* Educational Disclaimer */}
+              <div className="bg-gradient-to-br from-yellow-500/10 to-orange-500/10 border border-yellow-500/20 rounded-2xl p-6 backdrop-blur-sm">
+                <div className="flex items-start gap-3">
+                  <span className="text-2xl flex-shrink-0">⚠️</span>
+                  <div>
+                    <h3 className="text-yellow-400 font-bold text-lg mb-2">Educational Disclaimer</h3>
+                    <p className="text-gray-300 text-sm leading-relaxed">
+                      Masuk10 is an educational platform providing gaming analytics, statistical insights, and strategy learning resources.
+                      Results vary based on individual learning and application. We do not guarantee specific outcomes or financial returns.
+                      All content is for educational purposes only.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Main Footer Content */}
+              <div className="text-center space-y-6">
+                <p className="text-gray-400 text-lg">
+                  {footer.tagline || '© 2026 Masuk10. Professional Gaming Analytics & Education Platform.'}
+                </p>
+
+                {/* Legal Links */}
+                <div className="flex flex-wrap justify-center gap-6 text-sm">
+                  <a href="/terms" className="text-gray-500 hover:text-cyan-400 transition-colors">
+                    Terms of Service
+                  </a>
+                  <span className="text-gray-700">•</span>
+                  <a href="/privacy" className="text-gray-500 hover:text-cyan-400 transition-colors">
+                    Privacy Policy
+                  </a>
+                  <span className="text-gray-700">•</span>
+                  <a href="/disclaimer" className="text-gray-500 hover:text-cyan-400 transition-colors">
+                    Educational Disclaimer
+                  </a>
+                  <span className="text-gray-700">•</span>
+                  <a href="/responsible-gaming" className="text-gray-500 hover:text-cyan-400 transition-colors">
+                    Responsible Gaming
+                  </a>
+                  <span className="text-gray-700">•</span>
+                  <a href="/admin" className="text-gray-500 hover:text-cyan-400 transition-colors">
+                    Admin
+                  </a>
+                </div>
+
+                {/* Additional Info */}
+                <p className="text-gray-500 text-xs max-w-2xl mx-auto">
+                  This platform is designed for educational and analytical purposes. All strategies and insights shared are based on statistical analysis and should be used responsibly as part of your learning journey.
+                </p>
+              </div>
             </div>
           </div>
         </footer>
