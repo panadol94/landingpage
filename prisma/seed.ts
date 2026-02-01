@@ -52,6 +52,9 @@ async function main() {
         { section: 'hero', key: 'description', value: 'Dapatkan tips gaming terkini dan cipta shortlink dalam sekelip mata' },
         { section: 'hero', key: 'cta_text', value: 'Mulakan Sekarang' },
         { section: 'hero', key: 'cta_url', value: 'https://wa.me/60123456789' },
+        { section: 'hero', key: 'stats_button_text', value: 'See Live Stats' },
+        { section: 'hero', key: 'stats_button_url', value: '#' },
+        { section: 'hero', key: 'stats_button_enabled', value: 'true' },
 
         // Features
         { section: 'features', key: 'title', value: 'Kenapa Pilih Masuk10?' },

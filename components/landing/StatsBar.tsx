@@ -4,8 +4,19 @@ import { motion } from "framer-motion"
 import CountUp from "react-countup"
 import { Users, TrendingUp, DollarSign, Award } from "lucide-react"
 import { useInView } from "react-intersection-observer"
+import MagneticButton from "./MagneticButton"
 
-export default function StatsBar() {
+interface StatsBarProps {
+    buttonText?: string
+    buttonUrl?: string
+    buttonEnabled?: boolean
+}
+
+export default function StatsBar({
+    buttonText = "See Live Stats",
+    buttonUrl = "#",
+    buttonEnabled = false
+}: StatsBarProps) {
     const { ref, inView } = useInView({
         triggerOnce: true,
         threshold: 0.1
@@ -141,6 +152,26 @@ export default function StatsBar() {
                         )
                     })}
                 </motion.div>
+
+                {/* Stats Button */}
+                {buttonEnabled && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={inView ? { opacity: 1, y: 0 } : {}}
+                        transition={{ duration: 0.8, delay: 0.5 }}
+                        className="text-center mt-12"
+                    >
+                        <MagneticButton
+                            href={buttonUrl}
+                            className="inline-flex items-center gap-2"
+                        >
+                            <span className="relative z-10 font-bold text-lg">
+                                {buttonText}
+                            </span>
+                            <TrendingUp className="w-5 h-5" />
+                        </MagneticButton>
+                    </motion.div>
+                )}
             </div>
         </section>
     )

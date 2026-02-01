@@ -59,7 +59,11 @@ export default function HomePage() {
         />
 
         {/* Stats Bar */}
-        <StatsBar />
+        <StatsBar
+          buttonText={hero.stats_button_text}
+          buttonUrl={hero.stats_button_url}
+          buttonEnabled={hero.stats_button_enabled === 'true'}
+        />
 
         {/* Testimonials */}
         <Testimonials />
