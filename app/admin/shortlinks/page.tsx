@@ -231,7 +231,7 @@ export default function ShortlinksPage() {
                                                 Code *
                                             </label>
                                             <div className="flex items-center gap-2">
-                                                <span className="text-gray-400">www.tipsmega888.com/</span>
+                                                <span className="text-gray-400">masuk10.com/</span>
                                                 <input
                                                     type="text"
                                                     value={formData.code}
