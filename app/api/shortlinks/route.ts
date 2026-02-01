@@ -108,7 +108,7 @@ export async function POST(request: NextRequest) {
                 title,
                 description,
                 expiresAt: expiresAt ? new Date(expiresAt) : null,
-                createdBy: session.user.id
+                createdBy: session?.user?.id || null
             }
         })
 
