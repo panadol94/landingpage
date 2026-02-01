@@ -24,15 +24,15 @@ export default function StatsBar() {
             icon: TrendingUp,
             value: 98.5,
             suffix: "%",
-            label: "Success Rate",
-            subtext: "Verified Results",
+            label: "Member Satisfaction",
+            subtext: "Verified Reviews",
             color: "green"
         },
         {
-            icon: DollarSign,
+            icon: TrendingUp,
             value: 12.5,
-            suffix: "M+",
-            label: "Total Wins",
+            suffix: "k+",
+            label: "Analyses Performed",
             subtext: "This Month",
             color: "yellow"
         },

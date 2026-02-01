@@ -71,7 +71,7 @@ export default function HomePage() {
         <footer className="container mx-auto px-4 py-12 border-t border-white/10">
           <div className="text-center space-y-4">
             <p className="text-gray-400">
-              {footer.tagline || '© 2026 Masuk10. Platform Gaming Terpercaya.'}
+              {footer.tagline || '© 2026 Masuk10. Professional Gaming Analytics & Education Platform.'}
             </p>
             <div className="flex justify-center gap-4">
               <a href="/admin" className="text-gray-500 hover:text-cyan-400 transition-colors text-sm">

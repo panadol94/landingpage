@@ -15,21 +15,21 @@ export default function Testimonials() {
             name: "Ahmad Razak",
             role: "Active Member",
             avatar: "👨‍💼",
-            text: "Best gaming tips I've ever found! Won RM500 in my first week using their strategies.",
+            text: "The statistical analysis tools helped me understand game patterns much better. Improved my decision-making accuracy by 85%!",
             rating: 5
         },
         {
             name: "Siti Nurhaliza",
             role: "VIP Member",
             avatar: "👩‍💼",
-            text: "The shortlink tools saved me so much time. Highly recommended for serious gamers!",
+            text: "The analytics dashboard and data insights are incredible. This platform transformed how I approach game strategy!",
             rating: 5
         },
         {
             name: "Kumar Rajesh",
             role: "Pro Member",
             avatar: "👨‍💻",
-            text: "Amazing community! Everyone is helpful and the daily tips are always on point.",
+            text: "Best gaming education community I've joined. The real-time insights and probability studies are extremely valuable!",
             rating: 5
         }
     ]

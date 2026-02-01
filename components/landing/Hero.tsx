@@ -15,9 +15,9 @@ interface HeroProps {
 
 export default function Hero({
     title = "MASUK10",
-    subtitle = "Join 5,000+ Members in Our Exclusive Gaming Community",
-    description = "Get instant access to premium game tips, VIP shortlink tools, and daily winning patterns",
-    ctaText = "JOIN WHATSAPP GROUP NOW",
+    subtitle = "Advanced Gaming Analytics & Strategy Platform",
+    description = "Join 5,000+ members learning data-driven game analysis, statistical insights, and professional strategy development",
+    ctaText = "JOIN FREE ANALYTICS COMMUNITY",
     ctaUrl = "https://wa.me/60123456789",
     memberCount = "5,234+",
     rating = "4.9/5"
@@ -105,19 +105,19 @@ export default function Hero({
                             <div className="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center flex-shrink-0 mt-1">
                                 <span className="text-green-400 text-sm">✓</span>
                             </div>
-                            <span className="text-gray-300">Premium game tips & strategies</span>
+                            <span className="text-gray-300">Data-driven game analysis</span>
                         </div>
                         <div className="flex items-start gap-3">
                             <div className="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center flex-shrink-0 mt-1">
                                 <span className="text-green-400 text-sm">✓</span>
                             </div>
-                            <span className="text-gray-300">VIP shortlink tools</span>
+                            <span className="text-gray-300">Advanced analytics tools</span>
                         </div>
                         <div className="flex items-start gap-3">
                             <div className="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center flex-shrink-0 mt-1">
                                 <span className="text-green-400 text-sm">✓</span>
                             </div>
-                            <span className="text-gray-300">Daily winning patterns</span>
+                            <span className="text-gray-300">Real-time statistical insights</span>
                         </div>
                     </div>
                 </motion.div>
