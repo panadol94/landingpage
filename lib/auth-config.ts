@@ -2,8 +2,10 @@ import NextAuth from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import { prisma } from "@/lib/prisma"
 import { verifyPassword } from "@/lib/password"
+import { authConfig } from "@/lib/auth.config"
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+    ...authConfig,
     providers: [
         CredentialsProvider({
             name: "credentials",
@@ -48,28 +50,4 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             }
         })
     ],
-    pages: {
-        signIn: "/admin/login",
-    },
-    callbacks: {
-        async jwt({ token, user }) {
-            if (user) {
-                token.id = user.id as string
-                token.role = (user as { role: string }).role
-            }
-            return token
-        },
-        async session({ session, token }) {
-            if (session.user) {
-                session.user.id = token.id as string
-                session.user.role = token.role as string
-            }
-            return session
-        }
-    },
-    session: {
-        strategy: "jwt",
-        maxAge: 7 * 24 * 60 * 60, // 7 days
-    },
-    secret: process.env.NEXTAUTH_SECRET,
 })
