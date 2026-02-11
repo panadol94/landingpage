@@ -1,7 +1,8 @@
-import { auth } from "@/lib/auth-config"
 import { NextResponse } from "next/server"
+import { getToken } from "next-auth/jwt"
+import type { NextRequest } from "next/server"
 
-export default auth((req) => {
+export async function middleware(req: NextRequest) {
     const { pathname } = req.nextUrl
 
     // Skip login page — it's the entry point
@@ -11,14 +12,16 @@ export default auth((req) => {
 
     // Protect all /admin/* routes
     if (pathname.startsWith("/admin")) {
-        if (!req.auth) {
+        const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
+
+        if (!token) {
             const loginUrl = new URL("/admin/login", req.url)
             return NextResponse.redirect(loginUrl)
         }
     }
 
     return NextResponse.next()
-})
+}
 
 export const config = {
     matcher: ["/admin/:path*"]
