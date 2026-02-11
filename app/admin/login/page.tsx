@@ -2,6 +2,7 @@
 
 import { signIn } from "next-auth/react"
 import { useState } from "react"
+import Link from "next/link"
 import { useRouter } from "next/navigation"
 
 export default function AdminLoginPage() {
@@ -98,16 +99,16 @@ export default function AdminLoginPage() {
                     </form>
 
                     <div className="mt-6 text-center">
-                        <a href="/" className="text-sm text-cyan-400 hover:text-cyan-300 transition-colors">
+                        <Link href="/" className="text-sm text-cyan-400 hover:text-cyan-300 transition-colors">
                             ← Kembali ke Homepage
-                        </a>
+                        </Link>
                     </div>
                 </div>
 
-                {/* Development Info */}
+                {/* Footer */}
                 <div className="mt-6 text-center">
                     <p className="text-gray-500 text-xs">
-                        Default: admin@masuk10.com / Admin123!Masuk10
+                        © {new Date().getFullYear()} Masuk10
                     </p>
                 </div>
             </div>

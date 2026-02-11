@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
+import { auth } from "@/lib/auth-config"
 
 // GET /api/themes - Get all available themes
 export async function GET() {
@@ -24,6 +25,14 @@ export async function GET() {
 // POST /api/themes - Create a new theme (admin only)
 export async function POST(request: NextRequest) {
     try {
+        const session = await auth()
+        if (!session) {
+            return NextResponse.json(
+                { success: false, error: 'Unauthorized' },
+                { status: 401 }
+            )
+        }
+
         const body = await request.json()
         const {
             name,

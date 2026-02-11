@@ -60,7 +60,7 @@ export async function PUT(request: NextRequest) {
         const body = await request.json()
         const { section, key, value, language = 'ms' } = body
 
-        if (!section || !key || !value) {
+        if (!section || !key || value === undefined || value === null) {
             return NextResponse.json(
                 { success: false, error: 'Missing required fields' },
                 { status: 400 }

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { writeFile } from "fs/promises"
+import { writeFile, mkdir } from "fs/promises"
 import { join } from "path"
 import { auth } from "@/lib/auth-config"
 import { prisma } from "@/lib/prisma"
@@ -54,8 +54,12 @@ export async function POST(request: NextRequest) {
         const bytes = await file.arrayBuffer()
         const buffer = Buffer.from(bytes)
 
+        // Ensure uploads directory exists
+        const uploadsDir = join(process.cwd(), 'public', 'uploads')
+        await mkdir(uploadsDir, { recursive: true })
+
         // Save file to public/uploads directory
-        const uploadPath = join(process.cwd(), 'public', 'uploads', filename)
+        const uploadPath = join(uploadsDir, filename)
         await writeFile(uploadPath, buffer)
 
         // Create database record

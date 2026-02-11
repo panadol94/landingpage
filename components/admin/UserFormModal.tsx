@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { X } from 'lucide-react'
 import toast from 'react-hot-toast'
 
@@ -33,6 +33,16 @@ export default function UserFormModal({
         role: initialData?.role || 'EDITOR'
     })
     const [loading, setLoading] = useState(false)
+
+    // Reinitialize form when initialData changes (e.g. editing different user)
+    useEffect(() => {
+        setFormData({
+            email: initialData?.email || '',
+            password: '',
+            name: initialData?.name || '',
+            role: initialData?.role || 'EDITOR'
+        })
+    }, [initialData])
 
     if (!isOpen) return null
 

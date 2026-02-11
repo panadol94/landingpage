@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import RichTextEditor from "@/components/admin/RichTextEditor"
 import { Eye, EyeOff, Save } from "lucide-react"
+import Link from "next/link"
 import toast from "react-hot-toast"
 
 export default function ContentEditorPage() {
@@ -163,6 +164,7 @@ export default function ContentEditorPage() {
                                         ) : (
                                             <input
                                                 type="text"
+                                                key={`${selectedSection}-${key}`}
                                                 defaultValue={value}
                                                 onBlur={(e) => {
                                                     if (e.target.value !== value) {
@@ -206,12 +208,12 @@ export default function ContentEditorPage() {
 
                 {/* Back Button */}
                 <div className="mt-6">
-                    <a
+                    <Link
                         href="/admin/dashboard"
                         className="inline-block px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors"
                     >
                         ← Kembali ke Dashboard
-                    </a>
+                    </Link>
                 </div>
             </div>
         </div>

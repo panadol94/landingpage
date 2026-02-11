@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import Link from "next/link"
 import { Palette, Check, Settings2, RotateCcw, Save, Eye } from "lucide-react"
 import toast from "react-hot-toast"
 
@@ -205,7 +206,11 @@ export default function ThemeManagementPage() {
                                         Customize
                                     </button>
                                 )}
-                                <button className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors">
+                                <button
+                                    onClick={() => window.open('/', '_blank')}
+                                    className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors"
+                                    title="Preview landing page"
+                                >
                                     <Eye className="w-5 h-5" />
                                 </button>
                             </div>
@@ -223,10 +228,27 @@ export default function ThemeManagementPage() {
                             </div>
                             <div className="flex gap-2">
                                 <button
-                                    onClick={() => {
+                                    onClick={async () => {
                                         setCustomColors({})
                                         setCustomFonts({})
-                                        toast.success('Reset to defaults')
+                                        // Persist reset to database
+                                        try {
+                                            await fetch('/api/themes/customize', {
+                                                method: 'PUT',
+                                                headers: { 'Content-Type': 'application/json' },
+                                                body: JSON.stringify({
+                                                    activeThemeId: activeTheme.id,
+                                                    customColors: {},
+                                                    customFonts: {},
+                                                    customSpacing: {},
+                                                    customAnimations: {},
+                                                    customEffects: {}
+                                                })
+                                            })
+                                            toast.success('Reset to defaults and saved!')
+                                        } catch {
+                                            toast.error('Reset locally but failed to save')
+                                        }
                                     }}
                                     className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors flex items-center gap-2"
                                 >
@@ -327,12 +349,12 @@ export default function ThemeManagementPage() {
 
                 {/* Back Button */}
                 <div>
-                    <a
+                    <Link
                         href="/admin/dashboard"
                         className="inline-block px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors"
                     >
                         ← Kembali ke Dashboard
-                    </a>
+                    </Link>
                 </div>
             </div>
         </div>

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { Plus, Trash2, ExternalLink, Copy, BarChart3, QrCode, Download, X, Pencil } from "lucide-react"
+import Link from "next/link"
 import { generateQRCode, downloadQRCode } from "@/lib/qrcode"
 import toast from "react-hot-toast"
 
@@ -27,7 +28,8 @@ export default function ShortlinksPage() {
     const [formData, setFormData] = useState({
         code: '',
         destination: '',
-        title: ''
+        title: '',
+        isActive: true
     })
 
     useEffect(() => {
@@ -82,7 +84,7 @@ export default function ShortlinksPage() {
                 body: JSON.stringify({
                     destination: formData.destination,
                     title: formData.title || null,
-                    isActive: editingLink.isActive
+                    isActive: formData.isActive
                 })
             })
 
@@ -90,7 +92,7 @@ export default function ShortlinksPage() {
                 toast.success('✅ Shortlink berjaya dikemaskini!')
                 setEditingLink(null)
                 setShowCreateModal(false)
-                setFormData({ code: '', destination: '', title: '' })
+                setFormData({ code: '', destination: '', title: '', isActive: true })
                 fetchShortlinks()
             } else {
                 const data = await res.json()
@@ -106,7 +108,8 @@ export default function ShortlinksPage() {
         setFormData({
             code: link.code,
             destination: link.destination,
-            title: link.title || ''
+            title: link.title || '',
+            isActive: link.isActive
         })
         setShowCreateModal(true)
     }
@@ -115,7 +118,7 @@ export default function ShortlinksPage() {
         setShowCreateModal(false)
         setCreatedShortlink(null)
         setEditingLink(null)
-        setFormData({ code: '', destination: '', title: '' })
+        setFormData({ code: '', destination: '', title: '', isActive: true })
     }
 
 
@@ -317,6 +320,28 @@ export default function ShortlinksPage() {
                                                 className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:border-cyan-500"
                                             />
                                         </div>
+
+                                        {editingLink && (
+                                            <div className="flex items-center justify-between">
+                                                <label className="text-sm font-medium text-gray-300">
+                                                    Status
+                                                </label>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setFormData({ ...formData, isActive: !formData.isActive })}
+                                                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${formData.isActive ? 'bg-cyan-500' : 'bg-gray-600'
+                                                        }`}
+                                                >
+                                                    <span
+                                                        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${formData.isActive ? 'translate-x-6' : 'translate-x-1'
+                                                            }`}
+                                                    />
+                                                </button>
+                                                <span className={`text-sm ${formData.isActive ? 'text-green-400' : 'text-red-400'}`}>
+                                                    {formData.isActive ? 'Active' : 'Inactive'}
+                                                </span>
+                                            </div>
+                                        )}
 
                                         <div className="flex gap-3 pt-4">
                                             <button
@@ -575,12 +600,12 @@ export default function ShortlinksPage() {
 
                 {/* Back Button */}
                 <div className="mt-6">
-                    <a
+                    <Link
                         href="/admin/dashboard"
                         className="inline-block px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors"
                     >
                         ← Kembali ke Dashboard
-                    </a>
+                    </Link>
                 </div>
             </div>
         </div>

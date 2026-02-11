@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import Link from "next/link"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts'
 import { Calendar, Download } from "lucide-react"
 import { format, subDays, startOfDay, endOfDay } from 'date-fns'
@@ -265,7 +266,7 @@ export default function AnalyticsPage() {
                                         nameKey="type"
                                         label
                                     >
-                                        {stats.devices.map((entry, index) => (
+                                        {stats.devices.map((_entry, index) => (
                                             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                                         ))}
                                     </Pie>
@@ -305,12 +306,12 @@ export default function AnalyticsPage() {
 
                 {/* Back Button */}
                 <div>
-                    <a
+                    <Link
                         href="/admin/dashboard"
                         className="inline-block px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors"
                     >
                         ← Kembali ke Dashboard
-                    </a>
+                    </Link>
                 </div>
             </div>
         </div>

@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
+import { signOut } from "next-auth/react"
+import Link from "next/link"
 
 interface StatsData {
     totalShortlinks: number
@@ -20,7 +22,7 @@ export default function AdminDashboardPage() {
     const [error, setError] = useState<string | null>(null)
 
     useEffect(() => {
-        const checkAuth = async () => {
+        const init = async () => {
             try {
                 const res = await fetch('/api/auth/session')
                 if (!res.ok) {
@@ -29,13 +31,13 @@ export default function AdminDashboardPage() {
                 }
                 const session = await res.json()
                 setUser(session.user)
+                fetchStats()
             } catch {
                 router.push('/admin/login')
             }
         }
 
-        checkAuth()
-        fetchStats()
+        init()
     }, [router])
 
     const fetchStats = async () => {
@@ -57,12 +59,7 @@ export default function AdminDashboardPage() {
     }
 
     const handleLogout = async () => {
-        try {
-            await fetch('/api/auth/signout', { method: 'POST' })
-            router.push('/admin/login')
-        } catch (err) {
-            console.error('Logout error:', err)
-        }
+        await signOut({ callbackUrl: '/admin/login' })
     }
 
     if (loading) {
@@ -138,35 +135,35 @@ export default function AdminDashboardPage() {
                 <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-xl p-6">
                     <h2 className="text-xl font-bold text-white mb-4">Quick Actions</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <a href="/admin/content" className="block p-4 bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/20 rounded-lg text-left transition-colors group">
+                        <Link href="/admin/content" className="block p-4 bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/20 rounded-lg text-left transition-colors group">
                             <div className="text-cyan-400 font-semibold mb-1">📝 Edit Landing Page</div>
                             <div className="text-sm text-gray-400">Update content, images, and text</div>
-                        </a>
+                        </Link>
 
-                        <a href="/admin/themes" className="block p-4 bg-pink-500/10 hover:bg-pink-500/20 border border-pink-500/20 rounded-lg text-left transition-colors group">
+                        <Link href="/admin/themes" className="block p-4 bg-pink-500/10 hover:bg-pink-500/20 border border-pink-500/20 rounded-lg text-left transition-colors group">
                             <div className="text-pink-400 font-semibold mb-1">🎨 Theme Settings</div>
                             <div className="text-sm text-gray-400">Choose and customize landing page themes</div>
-                        </a>
+                        </Link>
 
-                        <a href="/admin/shortlinks" className="block p-4 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 rounded-lg text-left transition-colors group">
+                        <Link href="/admin/shortlinks" className="block p-4 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 rounded-lg text-left transition-colors group">
                             <div className="text-emerald-400 font-semibold mb-1">🔗 Manage Shortlinks</div>
                             <div className="text-sm text-gray-400">Create and track shortlinks</div>
-                        </a>
+                        </Link>
 
-                        <a href="/admin/analytics" className="block p-4 bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/20 rounded-lg text-left transition-colors group">
+                        <Link href="/admin/analytics" className="block p-4 bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/20 rounded-lg text-left transition-colors group">
                             <div className="text-purple-400 font-semibold mb-1">📊 View Analytics</div>
                             <div className="text-sm text-gray-400">Track clicks and performance</div>
-                        </a>
+                        </Link>
 
-                        <a href="/admin/media" className="block p-4 bg-orange-500/10 hover:bg-orange-500/20 border border-orange-500/20 rounded-lg text-left transition-colors group">
+                        <Link href="/admin/media" className="block p-4 bg-orange-500/10 hover:bg-orange-500/20 border border-orange-500/20 rounded-lg text-left transition-colors group">
                             <div className="text-orange-400 font-semibold mb-1">🖼️ Media Library</div>
                             <div className="text-sm text-gray-400">Upload and manage images</div>
-                        </a>
+                        </Link>
 
-                        <a href="/admin/users" className="block p-4 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 rounded-lg text-left transition-colors group">
+                        <Link href="/admin/users" className="block p-4 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 rounded-lg text-left transition-colors group">
                             <div className="text-rose-400 font-semibold mb-1">👥 User Management</div>
                             <div className="text-sm text-gray-400">Manage admin and editor users</div>
-                        </a>
+                        </Link>
                     </div>
                 </div>
             </div>
