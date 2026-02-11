@@ -46,7 +46,15 @@ export default function AdminDashboardPage() {
             const data = await res.json()
 
             if (data.success) {
-                setStats(data.data)
+                // Map nested API response to flat StatsData interface
+                setStats({
+                    totalShortlinks: data.data.shortlinks?.total ?? 0,
+                    activeShortlinks: data.data.shortlinks?.active ?? 0,
+                    totalClicks: data.data.clicks?.total ?? 0,
+                    clicksToday: data.data.clicks?.today ?? 0,
+                    clicksThisWeek: data.data.clicks?.thisWeek ?? 0,
+                    clicksThisMonth: data.data.clicks?.thisMonth ?? 0,
+                })
             } else {
                 setError('Failed to load statistics')
             }
